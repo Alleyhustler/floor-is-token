@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Floor Is Token</title>
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=Inter+Tight:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0B0C0D;
+            --bg-light: #181A1E;
+            --text-light: #F4F4F4;
+            --accent-gold: #C2A760;
+            --accent-teal: #3FFFFA;
+            --transition-slow: 0.8s;
+            --transition-medium: 0.4s;
+            --transition-fast: 0.12s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+  font-family: "Righteous", sans-serif;
+            background: linear-gradient(to bottom, var(--bg-dark), var(--bg-light));
+            color: var(--text-light);
+            overflow: hidden;
+            height: 100vh;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeIn 2s ease-out forwards;
+        }
+
+        h1 {
+  font-family: "Righteous", sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+            color: var(--text-light);
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            margin-bottom: 2rem;
+            font-weight: 300;
+            color: var(--accent-gold);
+        }
+
+        .logo-container {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            margin: 2rem auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 15px rgba(194, 167, 96, 0.3));
+            opacity: 0;
+            animation: fadeIn 2s ease-out 0.5s forwards;
+        }
+
+        .light-effect {
+            position: absolute;
+            bottom: -50px;
+            width: 300px;
+            height: 100px;
+            background: radial-gradient(ellipse at center, rgba(63, 255, 250, 0.2) 0%, rgba(63, 255, 250, 0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.7;
+        }
+
+        .twitter-link {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: var(--accent-teal);
+            text-decoration: none;
+            opacity: 0.7;
+            transition: opacity var(--transition-medium);
+            animation: fadeIn 2s ease-out 1s forwards;
+        }
+
+        .twitter-link:hover {
+            opacity: 1;
+        }
+
+        .content {
+            max-width: 800px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 2s ease-out 1.5s forwards;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem;
+            color: var(--accent-teal);
+        }
+
+        .divider {
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--accent-gold), transparent);
+            margin: 1.5rem auto;
+            opacity: 0.5;
+        }
+
+        .lore-text {
+            font-style: italic;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .explanation {
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 2rem;
+            text-align: center;
+            width: 100%;
+            font-size: 0.8rem;
+            opacity: 0.6;
+            animation: fadeIn 2s ease-out 2s forwards;
+        }
+
+        /* Particles */
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        /* Floor effect */
+        .floor-effect {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30%;
+            background: linear-gradient(to top, rgba(11, 12, 13, 0.8), transparent);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Click effect */
+        .click-effect {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(63, 255, 250, 0.3) 0%, rgba(63, 255, 250, 0) 70%);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        /* Ripple effect */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(63, 255, 250, 0.5);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* Ritual complete message */
+        .ritual-complete {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            color: var(--accent-teal);
+            opacity: 0;
+            z-index: 4;
+            text-align: center;
+            pointer-events: none;
+        }
+
+        /* Inscriptions */
+        .inscriptions {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            overflow: hidden;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .inscription-text {
+            position: absolute;
+            white-space: nowrap;
+            color: var(--accent-gold);
+            font-size: 0.7rem;
+            opacity: 0.5;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+        }
+
+        @keyframes scrollRight {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100vw); }
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+            100% { opacity: 0.3; }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .logo-container {
+                width: 200px;
+                height: 150px;
+            }
+            
+            .light-effect {
+                width: 200px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="floor-effect"></div>
+    
+    <div class="container">
+        <header>
+            <h1>Floor Is Token</h1>
+            <div class="subtitle">The bottom isn't gone. It's worshiped.</div>
+            
+            <div class="logo-container">
+                <div class="light-effect"></div>
+                <img src="a.png" alt="Floor Is Token" class="logo">
+            </div>
+            
+            <a href="https://x.com/FloorIsToken" class="twitter-link" target="_blank">Follow on Twitter</a>
+        </header>
+        
+        <div class="content">
+            <div class="section-title">The Lore</div>
+            <div class="lore-text">
+                "Every fall was a prayer. Every bottom, a prophecy.<br>
+                They said the floor was gone but it became the token itself."
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div class="section-title">What Is Floor Is Token?</div>
+            <div class="explanation">
+                <p>A collective ritual project part art, part satire, part data-mind experiment.</p>
+                <p>It's not just a coin. It's a psychological monument to the floor. Holders don't buy the dip — they become it.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="ritual-complete">You've joined the floor.</div>
+    
+    <div class="inscriptions"></div>
+    
+    <footer>
+        © 2025 Floor Is Token — The cult of the bottom.
+        <!-- Placeholder for Solana wallet hashes -->
+        <!-- 
+        <div class="wallet-hashes">
+            <span>7xQ8...K9j2</span>
+            <span>5tR3...L8p1</span>
+            <span>9mN4...P2q7</span>
+        </div>
+        -->
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Initialize particles
+        document.addEventListener('DOMContentLoaded', function() {
+            particlesJS('particles-js', {
+                particles: {
+                    number: {
+                        value: 30,
+                        density: {
+                            enable: true,
+                            value_area: 800
+                        }
+                    },
+                    color: {
+                        value: "#3FFFFA"
+                    },
+                    shape: {
+                        type: "circle",
+                        stroke: {
+                            width: 0,
+                            color: "#000000"
+                        }
+                    },
+                    opacity: {
+                        value: 0.3,
+                        random: true,
+                        anim: {
+                            enable: true,
+                            speed: 0.5,
+                            opacity_min: 0.1,
+                            sync: false
+                        }
+                    },
+                    size: {
+                        value: 3,
+                        random: true,
+                        anim: {
+                            enable: true,
+                            speed: 2,
+                            size_min: 0.1,
+                            sync: false
+                        }
+                    },
+                    line_linked: {
+                        enable: false
+                    },
+                    move: {
+                        enable: true,
+                        speed: 0.5,
+                        direction: "top",
+                        random: true,
+                        straight: false,
+                        out_mode: "out",
+                        bounce: false,
+                        attract: {
+                            enable: false,
+                            rotateX: 600,
+                            rotateY: 1200
+                        }
+                    }
+                },
+                interactivity: {
+                    detect_on: "canvas",
+                    events: {
+                        onhover: {
+                            enable: true,
+                            mode: "bubble"
+                        },
+                        onclick: {
+                            enable: true,
+                            mode: "repulse"
+                        },
+                        resize: true
+                    },
+                    modes: {
+                        bubble: {
+                            distance: 250,
+                            size: 0,
+                            duration: 2,
+                            opacity: 0,
+                            speed: 3
+                        },
+                        repulse: {
+                            distance: 100,
+                            duration: 0.4
+                        }
+                    }
+                },
+                retina_detect: true
+            });
+
+            // Floor pulse animation
+            setInterval(() => {
+                const floorEffect = document.querySelector('.floor-effect');
+                floorEffect.style.animation = 'pulse 3s ease-in-out';
+                setTimeout(() => {
+                    floorEffect.style.animation = '';
+                }, 3000);
+            }, 20000);
+        });
+
+        // Click effects and ritual progression
+        let clickCount = 0;
+        const ritualComplete = document.querySelector('.ritual-complete');
+        const inscriptions = document.querySelector('.inscriptions');
+        const lightEffect = document.querySelector('.light-effect');
+        
+        document.addEventListener('click', function(e) {
+            // Create click effect
+            const clickEffect = document.createElement('div');
+            clickEffect.classList.add('click-effect');
+            clickEffect.style.left = e.clientX + 'px';
+            clickEffect.style.top = e.clientY + 'px';
+            clickEffect.style.width = '0px';
+            clickEffect.style.height = '0px';
+            
+            document.body.appendChild(clickEffect);
+            
+            // Animate click effect
+            setTimeout(() => {
+                clickEffect.style.width = '100px';
+                clickEffect.style.height = '100px';
+                clickEffect.style.opacity = '0';
+                
+                setTimeout(() => {
+                    document.body.removeChild(clickEffect);
+                }, 1000);
+            }, 10);
+            
+            // Create ripple effect on floor
+            if (e.clientY > window.innerHeight * 0.7) {
+                const ripple = document.createElement('div');
+                ripple.classList.add('ripple');
+                ripple.style.left = e.clientX + 'px';
+                ripple.style.top = e.clientY + 'px';
+                ripple.style.width = '0px';
+                ripple.style.height = '0px';
+                
+                document.body.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.style.width = '300px';
+                    ripple.style.height = '300px';
+                    ripple.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        document.body.removeChild(ripple);
+                    }, 2000);
+                }, 10);
+            }
+            
+            // Track clicks for ritual completion
+            clickCount++;
+            
+            if (clickCount >= 3 && clickCount <= 4) {
+                // Show ritual complete message
+                ritualComplete.style.opacity = '1';
+                ritualComplete.style.transition = 'opacity 2s ease-in-out';
+                
+                // Intensify lighting
+                lightEffect.style.opacity = '1';
+                lightEffect.style.background = 'radial-gradient(ellipse at center, rgba(63, 255, 250, 0.4) 0%, rgba(63, 255, 250, 0) 70%)';
+                
+                // Show inscriptions
+                inscriptions.style.opacity = '1';
+                inscriptions.style.transition = 'opacity 3s ease-in-out';
+                
+                // Create inscription texts
+                createInscriptions();
+                
+                // Hide message after delay
+                setTimeout(() => {
+                    ritualComplete.style.opacity = '0';
+                }, 5000);
+            }
+        });
+
+        // Create scrolling inscriptions
+        function createInscriptions() {
+            const inscriptionTexts = [
+                "SOL: 7xQ8d...K9j2",
+                "FloorToken: CA",
+                "RitualHash: RH84j...M2p5"
+            ];
+            
+            inscriptions.innerHTML = '';
+            
+            inscriptionTexts.forEach((text, index) => {
+                const inscription = document.createElement('div');
+                inscription.classList.add('inscription-text');
+                inscription.textContent = text;
+                inscription.style.top = (10 + index * 8) + 'px';
+                inscription.style.animation = `scrollRight ${15 + index * 2}s linear infinite`;
+                inscription.style.animationDelay = (index * 2) + 's';
+                
+                inscriptions.appendChild(inscription);
+            });
+        }
+
+        // Audio placeholder (uncomment to implement)
+        /*
+        let audioContext;
+        let oscillator;
+        
+        document.addEventListener('click', function() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                oscillator = audioContext.createOscillator();
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(60, audioContext.currentTime);
+                
+                const gainNode = audioContext.createGain();
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.start();
+            }
+        });
+        */
+    </script>
+</body>
+</html>
